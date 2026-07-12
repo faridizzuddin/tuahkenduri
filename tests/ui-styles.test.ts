@@ -48,4 +48,10 @@ describe("responsive UI contract", () => {
     expect(participants).toContain("<strong>{confirmingAddition.name}</strong>");
     expect(participants).toContain('confirmLabel="Ya, Tambah Peserta"');
   });
+
+  it("aligns participant inputs on desktop and resets the action offset when stacked", () => {
+    expect(css).toMatch(/\.form-row\s*\{[\s\S]*?items-start/);
+    expect(css).toContain(".form-row > .button { @apply mt-[27px]; }");
+    expect(css).toContain(".form-row > .button { @apply mt-0; }");
+  });
 });
