@@ -7,7 +7,15 @@ export function ConfirmDialog({ open, title, description, confirmLabel = "Terusk
   open: boolean; title: string; description: string; confirmLabel?: string; danger?: boolean; onConfirm: () => void; onClose: () => void;
 }) {
   const cancelRef = useRef<HTMLButtonElement>(null);
-  useEffect(() => { if (open) cancelRef.current?.focus(); }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    cancelRef.current?.focus();
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open, onClose]);
   if (!open) return null;
   return (
     <div className="dialog-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
