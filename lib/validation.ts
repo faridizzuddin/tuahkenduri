@@ -1,7 +1,14 @@
 import { z } from "zod";
 
+export function normalizeTowelNumber(value: string, width = 3) {
+  const trimmed = value.trim();
+  if (!/^\d+$/.test(trimmed)) return trimmed;
+  const significantDigits = trimmed.replace(/^0+(?=\d)/, "");
+  return significantDigits.padStart(width, "0");
+}
+
 export const participantSchema = z.object({
-  towel_number: z.string().trim().min(1, "Nombor tuala diperlukan").max(40).regex(/^\d+$/, "Nombor tuala hanya boleh mengandungi angka"),
+  towel_number: z.string().trim().min(1, "Nombor tuala diperlukan").max(3, "Nombor tuala maksimum 3 digit").regex(/^\d+$/, "Nombor tuala hanya boleh mengandungi angka").transform((value) => normalizeTowelNumber(value)),
   name: z.string().trim().min(1, "Nama peserta diperlukan").max(120),
 });
 
