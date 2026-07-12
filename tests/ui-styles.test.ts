@@ -44,6 +44,8 @@ describe("responsive UI contract", () => {
     expect(participants).toContain('title="Sahkan maklumat peserta"');
     expect(participants).toContain("confirmingAddition.towel_number");
     expect(participants).toContain("confirmingAddition.name");
+    expect(participants).toContain("<strong>{confirmingAddition.towel_number}</strong>");
+    expect(participants).toContain("<strong>{confirmingAddition.name}</strong>");
     expect(participants).toContain('confirmLabel="Ya, Tambah Peserta"');
   });
 });
