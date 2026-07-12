@@ -20,6 +20,12 @@ describe("participant input", () => {
     expect(second.name).toBe(first.name);
   });
 
+  it("accepts digits with leading zeroes and rejects non-numeric towel values", () => {
+    expect(participantSchema.safeParse({ towel_number: "001", name: "Puan Aminah" }).success).toBe(true);
+    expect(participantSchema.safeParse({ towel_number: "A01", name: "Puan Aminah" }).success).toBe(false);
+    expect(participantSchema.safeParse({ towel_number: "01-2", name: "Puan Aminah" }).success).toBe(false);
+  });
+
   it("normalises unnecessary spaces", () => {
     expect(cleanSpaces("  Pak   Long Ahmad  ")).toBe("Pak Long Ahmad");
   });
