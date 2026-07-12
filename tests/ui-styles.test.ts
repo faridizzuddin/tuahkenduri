@@ -33,4 +33,10 @@ describe("responsive UI contract", () => {
       expect(source).toContain("data-label=");
     }
   });
+
+  it("requests a numeric keypad for towel-number entry", () => {
+    expect(participants).toContain('inputMode="numeric"');
+    expect(participants).toContain('pattern="[0-9]*"');
+    expect(participants).toContain("keepOnlyDigits");
+  });
 });

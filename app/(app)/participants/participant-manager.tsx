@@ -17,6 +17,11 @@ function parseCsv(text: string) {
   });
 }
 
+function keepOnlyDigits(event: FormEvent<HTMLInputElement>) {
+  const digits = event.currentTarget.value.replace(/\D/g, "");
+  if (event.currentTarget.value !== digits) event.currentTarget.value = digits;
+}
+
 export function ParticipantManager({ participants }: { participants: Participant[] }) {
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState<{ kind: "success" | "error" | "info"; text: string } | null>(null);
@@ -24,6 +29,7 @@ export function ParticipantManager({ participants }: { participants: Participant
   const [deleting, setDeleting] = useState<Participant | null>(null);
   const [pending, startTransition] = useTransition();
   const towelRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const filtered = useMemo(() => participants.filter((p) => `${p.towel_number} ${p.name}`.toLowerCase().includes(query.toLowerCase())), [participants, query]);
 
@@ -55,8 +61,8 @@ export function ParticipantManager({ participants }: { participants: Participant
       <section className="card card-pad">
         <div className="section-title"><div><h2>Tambah Peserta</h2><p>Tekan Enter untuk simpan dan teruskan kepada peserta seterusnya.</p></div><button className="button secondary" onClick={() => fileRef.current?.click()} disabled={pending}><FileUp /> Import CSV</button><input hidden ref={fileRef} type="file" accept=".csv,text/csv" onChange={readCsv} /></div>
         <form className="form-row" onSubmit={add}>
-          <div className="field"><label htmlFor="towel_number">Nombor Tuala</label><input ref={towelRef} className="input" id="towel_number" name="towel_number" maxLength={40} autoComplete="off" required autoFocus placeholder="cth. 001" /></div>
-          <div className="field"><label htmlFor="name">Nama Peserta</label><input className="input" id="name" name="name" maxLength={120} required placeholder="Nama penuh peserta" /></div>
+          <div className="field"><label htmlFor="towel_number">Nombor Tuala</label><input ref={towelRef} className="input" id="towel_number" name="towel_number" type="text" inputMode="numeric" pattern="[0-9]*" maxLength={40} autoComplete="off" enterKeyHint="next" required autoFocus placeholder="cth. 001" aria-describedby="towel-number-hint" onInput={keepOnlyDigits} onKeyDown={(event) => { if (event.key === "Enter" && !nameRef.current?.value.trim()) { event.preventDefault(); nameRef.current?.focus(); } }} /><small className="field-hint" id="towel-number-hint">Angka sahaja · sifar di hadapan dikekalkan</small></div>
+          <div className="field"><label htmlFor="name">Nama Peserta</label><input ref={nameRef} className="input" id="name" name="name" maxLength={120} enterKeyHint="done" required placeholder="Nama penuh peserta" /></div>
           <button className="button primary" type="submit" disabled={pending}>{pending ? "Menyimpan…" : "Tambah Peserta"}</button>
         </form>
         {message && <div className={`notice ${message.kind}`} role="status">{message.text}</div>}
@@ -65,7 +71,7 @@ export function ParticipantManager({ participants }: { participants: Participant
       <section className="table-wrap">
         {filtered.length ? <table><thead><tr><th>Nombor Tuala</th><th>Nama Peserta</th><th>Status</th><th className="text-right">Tindakan</th></tr></thead><tbody>{filtered.map((p) => <tr key={p.id}><td className="number-cell" data-label="Nombor Tuala">{p.towel_number}</td><td data-label="Nama Peserta">{p.name}</td><td data-label="Status"><StatusBadge status={p.status} /></td><td className="table-actions-cell" data-label="Tindakan"><div className="actions">{p.status !== "won" && <select className="select compact-select" aria-label={`Status ${p.name}`} value={p.status} onChange={(e) => changeStatus(p.id, e.target.value as ParticipantStatus)} disabled={pending}><option value="eligible">Layak</option><option value="absent">Tidak hadir</option><option value="disabled">Dilumpuhkan</option></select>}<button className="icon-button" onClick={() => setEditing(p)} aria-label={`Edit ${p.name}`}><Pencil /></button><button className="icon-button" onClick={() => setDeleting(p)} aria-label={`Padam ${p.name}`}><Trash2 /></button></div></td></tr>)}</tbody></table> : <div className="empty-state"><Users /><h3>Tiada peserta ditemui</h3><p>Tambah peserta atau ubah kata carian.</p></div>}
       </section>
-      {editing && <div className="dialog-backdrop" role="presentation"><form className="dialog" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); startTransition(async () => { const r = await updateParticipant(editing.id, { towel_number: String(fd.get("towel_number")), name: String(fd.get("name")) }); setMessage({ kind: r.ok ? "success" : "error", text: r.message }); if (r.ok) setEditing(null); }); }}><span className="eyebrow">Kemaskini maklumat</span><h2>Edit Peserta</h2><div className="field"><label htmlFor="edit-towel">Nombor Tuala</label><input className="input" id="edit-towel" name="towel_number" defaultValue={editing.towel_number} required autoFocus /></div><div className="field mt-3.5"><label htmlFor="edit-name">Nama Peserta</label><input className="input" id="edit-name" name="name" defaultValue={editing.name} required /></div><div className="dialog-actions"><button type="button" className="button secondary" onClick={() => setEditing(null)}>Batal</button><button className="button primary" disabled={pending}>Simpan</button></div></form></div>}
+      {editing && <div className="dialog-backdrop" role="presentation"><form className="dialog" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); startTransition(async () => { const r = await updateParticipant(editing.id, { towel_number: String(fd.get("towel_number")), name: String(fd.get("name")) }); setMessage({ kind: r.ok ? "success" : "error", text: r.message }); if (r.ok) setEditing(null); }); }}><span className="eyebrow">Kemaskini maklumat</span><h2>Edit Peserta</h2><div className="field"><label htmlFor="edit-towel">Nombor Tuala</label><input className="input" id="edit-towel" name="towel_number" type="text" inputMode="numeric" pattern="[0-9]*" maxLength={40} defaultValue={editing.towel_number} required autoFocus onInput={keepOnlyDigits} /></div><div className="field mt-3.5"><label htmlFor="edit-name">Nama Peserta</label><input className="input" id="edit-name" name="name" defaultValue={editing.name} required /></div><div className="dialog-actions"><button type="button" className="button secondary" onClick={() => setEditing(null)}>Batal</button><button className="button primary" disabled={pending}>Simpan</button></div></form></div>}
       <ConfirmDialog open={!!deleting} title="Padam peserta?" description={deleting ? `${deleting.towel_number} — ${deleting.name} akan dipadam. Peserta yang mempunyai sejarah cabutan tidak boleh dipadam.` : ""} confirmLabel="Padam Peserta" onClose={() => setDeleting(null)} onConfirm={() => deleting && startTransition(async () => { const r = await deleteParticipant(deleting.id); setMessage({ kind: r.ok ? "success" : "error", text: r.message }); setDeleting(null); })} />
     </>
   );

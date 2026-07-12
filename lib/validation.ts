@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const participantSchema = z.object({
-  towel_number: z.string().trim().min(1, "Nombor tuala diperlukan").max(40),
+  towel_number: z.string().trim().min(1, "Nombor tuala diperlukan").max(40).regex(/^\d+$/, "Nombor tuala hanya boleh mengandungi angka"),
   name: z.string().trim().min(1, "Nama peserta diperlukan").max(120),
 });
 

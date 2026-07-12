@@ -193,6 +193,7 @@
 
   .field { @apply grid gap-2; }
   .field label { @apply text-[13px] font-extrabold text-[#554a49]; }
+  .field-hint { @apply text-[11px] leading-4 font-semibold text-muted; }
 
   .input,
   .select {
