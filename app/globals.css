@@ -203,8 +203,10 @@
   .select { @apply pr-9; }
 
   .form-row {
-    @apply grid grid-cols-[180px_minmax(240px,1fr)_auto] items-end gap-3.5;
+    @apply grid grid-cols-[180px_minmax(240px,1fr)_auto] items-start gap-3.5;
   }
+
+  .form-row > .button { @apply mt-[27px]; }
 
   .toolbar {
     @apply my-6 mb-4 flex items-center justify-between gap-3.5;
@@ -519,6 +521,7 @@
   .card-pad { @apply p-5; }
   .section-title { @apply items-start; }
   .form-row { @apply grid-cols-1; }
+  .form-row > .button { @apply mt-0; }
   .toolbar { @apply items-stretch; }
   .search-wrap { @apply max-w-none; }
   .gift-summary { @apply grid-cols-3; }

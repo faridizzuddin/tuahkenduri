@@ -39,4 +39,19 @@ describe("responsive UI contract", () => {
     expect(participants).toContain('pattern="[0-9]*"');
     expect(participants).toContain("keepOnlyDigits");
   });
+
+  it("asks the host to verify a participant before saving", () => {
+    expect(participants).toContain('title="Sahkan maklumat peserta"');
+    expect(participants).toContain("confirmingAddition.towel_number");
+    expect(participants).toContain("confirmingAddition.name");
+    expect(participants).toContain("<strong>{confirmingAddition.towel_number}</strong>");
+    expect(participants).toContain("<strong>{confirmingAddition.name}</strong>");
+    expect(participants).toContain('confirmLabel="Ya, Tambah Peserta"');
+  });
+
+  it("aligns participant inputs on desktop and resets the action offset when stacked", () => {
+    expect(css).toMatch(/\.form-row\s*\{[\s\S]*?items-start/);
+    expect(css).toContain(".form-row > .button { @apply mt-[27px]; }");
+    expect(css).toContain(".form-row > .button { @apply mt-0; }");
+  });
 });

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { ReactNode } from "react";
 import { X } from "lucide-react";
 
 export function ConfirmDialog({ open, title, description, confirmLabel = "Teruskan", danger = true, onConfirm, onClose }: {
-  open: boolean; title: string; description: string; confirmLabel?: string; danger?: boolean; onConfirm: () => void; onClose: () => void;
+  open: boolean; title: string; description: ReactNode; confirmLabel?: string; danger?: boolean; onConfirm: () => void; onClose: () => void;
 }) {
   const cancelRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
