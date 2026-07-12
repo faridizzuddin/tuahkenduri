@@ -1,2 +1,2 @@
 import Link from "next/link";
-export default function NotFound() { return <main style={{ minHeight: "100vh", display: "grid", placeItems: "center" }}><div style={{ textAlign: "center" }}><span className="eyebrow">404</span><h1>Halaman tidak ditemui</h1><Link className="button primary" href="/">Kembali ke Ringkasan</Link></div></main>; }
+export default function NotFound() { return <main className="grid min-h-dvh place-items-center p-6"><div className="text-center"><span className="eyebrow">404</span><h1 className="mt-2 mb-6 font-display text-4xl font-semibold tracking-tight text-maroon-dark">Halaman tidak ditemui</h1><Link className="button primary" href="/">Kembali ke Ringkasan</Link></div></main>; }

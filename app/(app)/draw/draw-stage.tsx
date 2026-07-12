@@ -71,10 +71,18 @@ export function DrawStage({ initial, sampleNumbers, eligibleCount, availableGift
   function fullscreen() { document.documentElement.requestFullscreen?.(); }
 
   const canStart = eligibleCount > 0 && availableGiftCount > 0;
+  const announcement = stage === "participant-reveal" && current
+    ? `Pemenang dipilih. Nombor tuala ${current.towelNumber}, ${current.name}.`
+    : stage === "gift-ready" && current
+      ? `Pemenang ${current.name} telah disahkan. Sedia untuk cabutan hadiah.`
+      : stage === "complete" && current
+        ? `Hadiah nombor ${current.giftNumber} diberikan kepada ${current.name}.`
+        : "";
   return (
     <main className={`draw-screen ${stage === "complete" ? "celebrating" : ""}`}>
       <header className="draw-header"><Link href="/" className="draw-back"><ArrowLeft /> Kembali</Link><div className="draw-brand"><Sparkles /> Cabutan Bertuah <span>Kenduri</span></div><button className="draw-back" onClick={fullscreen}><Maximize /> Skrin Penuh</button></header>
-      <section className="draw-center" aria-live="polite">
+      <p className="sr-only" aria-live="polite" aria-atomic="true">{announcement}</p>
+      <section className="draw-center">
         {stage === "idle" && <div className="draw-idle"><span className="draw-ornament">✦</span><p className="draw-kicker">Dengan penuh debaran</p><h1>Siapakah yang<br />bertuah?</h1><p>{eligibleCount} peserta layak · {availableGiftCount} hadiah tersedia</p>{!canStart && <div className="draw-error">{eligibleCount === 0 ? "Tiada peserta yang layak untuk cabutan." : "Tiada hadiah tersedia. Tambah atau pulihkan hadiah dahulu."}</div>}<button className="draw-main-button" onClick={pickParticipant} disabled={busy || !canStart}><Sparkles /> {busy ? "SEDANG MEMILIH…" : "CABUT PEMENANG"}</button></div>}
         {stage === "participant-shuffle" && <div className="shuffle-panel"><p>Mencari peserta bertuah…</p><strong>{display}</strong><div className="shuffle-line" /></div>}
         {stage === "participant-reveal" && current && <div className="winner-panel"><p className="draw-kicker">Tahniah!</p><h1>Nombor Tuala</h1><strong className="hero-number">{current.towelNumber}</strong><h2>{current.name}</h2><div className="draw-actions"><button className="draw-secondary danger-outline" onClick={() => setAbsentDialog(true)} disabled={busy}><UserX /> TIDAK HADIR / CABUT SEMULA</button><button className="draw-main-button compact" onClick={confirm} disabled={busy}><UserCheck /> {busy ? "MENGESAHKAN…" : "SAHKAN PEMENANG"}</button></div></div>}
