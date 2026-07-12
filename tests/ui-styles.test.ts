@@ -39,4 +39,11 @@ describe("responsive UI contract", () => {
     expect(participants).toContain('pattern="[0-9]*"');
     expect(participants).toContain("keepOnlyDigits");
   });
+
+  it("asks the host to verify a participant before saving", () => {
+    expect(participants).toContain('title="Sahkan maklumat peserta"');
+    expect(participants).toContain("confirmingAddition.towel_number");
+    expect(participants).toContain("confirmingAddition.name");
+    expect(participants).toContain('confirmLabel="Ya, Tambah Peserta"');
+  });
 });
