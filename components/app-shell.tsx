@@ -6,6 +6,7 @@ import { Gift, History, LayoutDashboard, LogOut, Menu, Settings, TicketCheck, Us
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Logo } from "./logo";
+import { NavigationProgress } from "./loading-indicator";
 
 const links = [
   { href: "/", label: "Ringkasan", icon: LayoutDashboard },
@@ -20,7 +21,29 @@ export function AppShell({ children, email }: { children: React.ReactNode; email
   const path = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [pendingPath, setPendingPath] = useState<string | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const navigating = pendingPath !== null && pendingPath !== path;
+
+  useEffect(() => {
+    function handleNavigationClick(event: MouseEvent) {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const anchor = target.closest<HTMLAnchorElement>("a[href]");
+      if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+      const destination = new URL(anchor.href, window.location.href);
+      if (destination.origin === window.location.origin && destination.pathname !== path) setPendingPath(destination.pathname);
+    }
+    document.addEventListener("click", handleNavigationClick, true);
+    return () => document.removeEventListener("click", handleNavigationClick, true);
+  }, [path]);
+
+  useEffect(() => {
+    if (!navigating) return;
+    const timeout = window.setTimeout(() => setPendingPath(null), 15000);
+    return () => window.clearTimeout(timeout);
+  }, [navigating]);
 
   useEffect(() => {
     if (!open) return;
@@ -45,13 +68,15 @@ export function AppShell({ children, email }: { children: React.ReactNode; email
   }
 
   async function signOut() {
+    setPendingPath("/login");
     await createClient().auth.signOut();
     router.replace("/login");
     router.refresh();
   }
-  if (path === "/draw") return <>{children}</>;
+  if (path === "/draw") return <><NavigationProgress active={navigating} />{children}</>;
   return (
     <div className="app-frame">
+      <NavigationProgress active={navigating} />
       <aside id="app-navigation" className={`sidebar ${open ? "sidebar-open" : ""}`} aria-label="Menu aplikasi">
         <div className="sidebar-top"><Logo /><button className="icon-button mobile-only" onClick={() => closeMenu(true)} aria-label="Tutup menu"><X /></button></div>
         <nav aria-label="Navigasi utama">
