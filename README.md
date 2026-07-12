@@ -89,7 +89,7 @@ towel_number,name
 003,Kak Siti
 ```
 
-Leading zeroes are retained. Existing towel numbers, duplicate rows, and invalid records are reported and skipped. Participant names may repeat.
+Towel numbers are normalised to at least three digits, so `2`, `02`, and `002` are all stored as `002`. Existing towel numbers, duplicate rows, and invalid records are reported and skipped. Participant names may repeat.
 
 ## Verification
 

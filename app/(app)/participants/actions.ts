@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { cleanSpaces, participantSchema } from "@/lib/validation";
+import { cleanSpaces, normalizeTowelNumber, participantSchema } from "@/lib/validation";
 import { friendlyError } from "@/lib/error";
 import type { ActionResult, ParticipantStatus } from "@/lib/types";
 
@@ -10,7 +10,7 @@ export async function addParticipant(input: { towel_number: string; name: string
   const parsed = participantSchema.safeParse(input);
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message ?? "Maklumat tidak sah" };
   const supabase = await createClient();
-  const { error } = await supabase.from("participants").insert({ towel_number: cleanSpaces(parsed.data.towel_number), name: cleanSpaces(parsed.data.name) });
+  const { error } = await supabase.from("participants").insert({ towel_number: parsed.data.towel_number, name: cleanSpaces(parsed.data.name) });
   if (error) return { ok: false, message: friendlyError(error) };
   revalidatePath("/participants"); revalidatePath("/");
   return { ok: true, message: "Peserta berjaya didaftarkan." };
@@ -20,7 +20,7 @@ export async function updateParticipant(id: string, input: { towel_number: strin
   const parsed = participantSchema.safeParse(input);
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message ?? "Maklumat tidak sah" };
   const supabase = await createClient();
-  const { error } = await supabase.from("participants").update({ towel_number: cleanSpaces(parsed.data.towel_number), name: cleanSpaces(parsed.data.name) }).eq("id", id);
+  const { error } = await supabase.from("participants").update({ towel_number: parsed.data.towel_number, name: cleanSpaces(parsed.data.name) }).eq("id", id);
   if (error) return { ok: false, message: friendlyError(error) };
   revalidatePath("/participants"); revalidatePath("/history");
   return { ok: true, message: "Maklumat peserta dikemas kini." };
@@ -52,8 +52,9 @@ export async function importParticipants(rows: Array<{ towel_number: string; nam
   const clean: Array<{ towel_number: string; name: string }> = [];
   rows.forEach((row, i) => {
     const parsed = participantSchema.safeParse(row);
-    const number = cleanSpaces(row.towel_number ?? "");
-    if (!parsed.success || seen.has(number)) { invalid.push(`Baris ${i + 2}: ${number || "tanpa nombor"}`); return; }
+    const rawNumber = cleanSpaces(row.towel_number ?? "");
+    const number = parsed.success ? parsed.data.towel_number : normalizeTowelNumber(rawNumber);
+    if (!parsed.success || seen.has(number)) { invalid.push(`Baris ${i + 2}: ${rawNumber || "tanpa nombor"}`); return; }
     seen.add(number); clean.push({ towel_number: number, name: cleanSpaces(parsed.data.name) });
   });
   const supabase = await createClient();

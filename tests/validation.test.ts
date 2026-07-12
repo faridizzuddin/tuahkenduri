@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cleanSpaces, escapeCsv, generateGiftNumbers, participantSchema } from "../lib/validation";
+import { cleanSpaces, escapeCsv, generateGiftNumbers, normalizeTowelNumber, participantSchema } from "../lib/validation";
 
 describe("gift range generation", () => {
   it("preserves the requested leading-zero padding", () => {
@@ -24,6 +24,16 @@ describe("participant input", () => {
     expect(participantSchema.safeParse({ towel_number: "001", name: "Puan Aminah" }).success).toBe(true);
     expect(participantSchema.safeParse({ towel_number: "A01", name: "Puan Aminah" }).success).toBe(false);
     expect(participantSchema.safeParse({ towel_number: "01-2", name: "Puan Aminah" }).success).toBe(false);
+  });
+
+  it("normalises towel numbers to a canonical three-digit format", () => {
+    expect(normalizeTowelNumber("2")).toBe("002");
+    expect(normalizeTowelNumber("02")).toBe("002");
+    expect(normalizeTowelNumber("002")).toBe("002");
+    expect(normalizeTowelNumber("0002")).toBe("002");
+    expect(normalizeTowelNumber("1234")).toBe("1234");
+    expect(participantSchema.parse({ towel_number: "2", name: "Puan Aminah" }).towel_number).toBe("002");
+    expect(participantSchema.safeParse({ towel_number: "1000", name: "Puan Aminah" }).success).toBe(false);
   });
 
   it("normalises unnecessary spaces", () => {
