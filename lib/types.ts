@@ -29,6 +29,28 @@ export interface DrawView {
   gift: Pick<Gift, "id" | "gift_number"> | null;
 }
 
+export interface BetikGame {
+  id: number;
+  actual_seed_count: number | null;
+  revealed_at: string | null;
+  updated_at: string;
+}
+
+export interface BetikGuess {
+  id: string;
+  participant_name: string;
+  entry_reference: string | null;
+  guessed_count: number;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RankedBetikGuess extends BetikGuess {
+  difference: number;
+  rank: number;
+}
+
 export interface ActionResult<T = undefined> {
   ok: boolean;
   message: string;

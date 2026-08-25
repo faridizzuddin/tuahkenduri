@@ -7,6 +7,7 @@ const layout = readFileSync(join(process.cwd(), "app/layout.tsx"), "utf8");
 const participants = readFileSync(join(process.cwd(), "app/(app)/participants/participant-manager.tsx"), "utf8");
 const gifts = readFileSync(join(process.cwd(), "app/(app)/gifts/gift-manager.tsx"), "utf8");
 const history = readFileSync(join(process.cwd(), "app/(app)/history/history-table.tsx"), "utf8");
+const betik = readFileSync(join(process.cwd(), "app/(app)/teka-biji-betik/betik-game-manager.tsx"), "utf8");
 
 describe("responsive UI contract", () => {
   it("loads the wedding display and readable interface fonts through next/font", () => {
@@ -29,7 +30,7 @@ describe("responsive UI contract", () => {
   });
 
   it("provides labels for portrait card rows", () => {
-    for (const source of [participants, gifts, history]) {
+    for (const source of [participants, gifts, history, betik]) {
       expect(source).toContain("data-label=");
     }
   });
@@ -53,5 +54,11 @@ describe("responsive UI contract", () => {
     expect(css).toMatch(/\.form-row\s*\{[\s\S]*?items-start/);
     expect(css).toContain(".form-row > .button { @apply mt-[27px]; }");
     expect(css).toContain(".form-row > .button { @apply mt-0; }");
+  });
+
+  it("provides a responsive game layout and numeric keypads for both counts", () => {
+    expect(css).toContain(".betik-hero");
+    expect(css).toContain(".betik-entry-form");
+    expect(betik.match(/inputMode="numeric"/g)?.length).toBeGreaterThanOrEqual(3);
   });
 });

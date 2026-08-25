@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cleanSpaces, escapeCsv, generateGiftNumbers, normalizeTowelNumber, participantSchema } from "../lib/validation";
+import { betikAnswerSchema, betikGuessSchema, cleanSpaces, escapeCsv, generateGiftNumbers, normalizeTowelNumber, participantSchema, rankBetikGuesses } from "../lib/validation";
 
 describe("gift range generation", () => {
   it("preserves the requested leading-zero padding", () => {
@@ -44,5 +44,35 @@ describe("participant input", () => {
 describe("CSV output", () => {
   it("quotes commas and doubles embedded quotes", () => {
     expect(escapeCsv('Puan "Minah", Johor')).toBe('"Puan ""Minah"", Johor"');
+  });
+});
+
+describe("teka biji betik", () => {
+  it("accepts a whole-number guess and optional reference", () => {
+    const entry = betikGuessSchema.parse({ participant_name: "Kak Siti", entry_reference: "Meja 6", guessed_count: "438" });
+    expect(entry.guessed_count).toBe(438);
+    expect(betikGuessSchema.safeParse({ participant_name: "Kak Siti", entry_reference: "", guessed_count: 0 }).success).toBe(false);
+    expect(betikAnswerSchema.safeParse(1000001).success).toBe(false);
+  });
+
+  it("shares a rank between equally close guesses and skips the following rank", () => {
+    const ranked = rankBetikGuesses([
+      { id: "a", guessed_count: 490, created_at: "2026-08-25T10:00:00Z" },
+      { id: "b", guessed_count: 510, created_at: "2026-08-25T10:01:00Z" },
+      { id: "c", guessed_count: 480, created_at: "2026-08-25T10:02:00Z" },
+    ], 500);
+    expect(ranked.map(({ id, difference, rank }) => ({ id, difference, rank }))).toEqual([
+      { id: "a", difference: 10, rank: 1 },
+      { id: "b", difference: 10, rank: 1 },
+      { id: "c", difference: 20, rank: 3 },
+    ]);
+  });
+
+  it("puts an exact guess first", () => {
+    const ranked = rankBetikGuesses([
+      { id: "near", guessed_count: 499, created_at: "2026-08-25T10:00:00Z" },
+      { id: "exact", guessed_count: 500, created_at: "2026-08-25T10:01:00Z" },
+    ], 500);
+    expect(ranked[0]).toMatchObject({ id: "exact", difference: 0, rank: 1 });
   });
 });

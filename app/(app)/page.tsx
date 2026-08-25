@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertTriangle, ArrowRight, Gift, History, Sparkles, TicketCheck, UserRoundCheck, UserRoundX, Users } from "lucide-react";
+import { AlertTriangle, ArrowRight, Gift, History, Sparkles, Sprout, TicketCheck, UserRoundCheck, UserRoundX, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 async function count(table: "participants" | "gifts" | "draw_results", status?: string) {
@@ -29,6 +29,6 @@ export default async function DashboardPage() {
   return <div className="page dashboard"><header className="page-header"><div><span className="eyebrow">Selamat datang, hos</span><h1>Ringkasan Kenduri</h1><p>Semua yang anda perlukan untuk cabutan yang lancar.</p></div><Link className="button primary" href="/draw"><Sparkles /> Mula Cabutan</Link></header>
     {warnings.length > 0 && <section className="warning-strip"><AlertTriangle /><div><strong>Semakan kesediaan</strong>{warnings.map((warning) => <p key={warning}>{warning}</p>)}</div></section>}
     <section className="stats-grid">{stats.map(([label, value, Icon], i) => <article className="stat-card" key={label}><div className={`stat-icon tone-${i % 4}`}><Icon /></div><div><span>{label}</span><strong>{value}</strong></div></article>)}</section>
-    <section className="quick-section"><div className="section-title"><div><h2>Tindakan Pantas</h2><p>Pilih bahagian untuk diteruskan.</p></div></div><div className="quick-grid"><Link href="/participants"><Users /><span><b>Urus Peserta</b><small>Daftar dan semak kelayakan</small></span><ArrowRight /></Link><Link href="/gifts"><Gift /><span><b>Urus Hadiah</b><small>Tambah dan jana nombor hadiah</small></span><ArrowRight /></Link><Link href="/draw" className="featured"><Sparkles /><span><b>Mula Cabutan</b><small>Paparan penuh untuk majlis</small></span><ArrowRight /></Link><Link href="/history"><History /><span><b>Sejarah Cabutan</b><small>Lihat dan eksport keputusan</small></span><ArrowRight /></Link></div></section>
+    <section className="quick-section"><div className="section-title"><div><h2>Tindakan Pantas</h2><p>Pilih bahagian untuk diteruskan.</p></div></div><div className="quick-grid"><Link href="/participants"><Users /><span><b>Urus Peserta</b><small>Daftar dan semak kelayakan</small></span><ArrowRight /></Link><Link href="/gifts"><Gift /><span><b>Urus Hadiah</b><small>Tambah dan jana nombor hadiah</small></span><ArrowRight /></Link><Link href="/teka-biji-betik" className="game"><Sprout /><span><b>Teka Biji Betik</b><small>Rekod tekaan dan cari pemenang</small></span><ArrowRight /></Link><Link href="/draw" className="featured"><Sparkles /><span><b>Mula Cabutan</b><small>Paparan penuh untuk majlis</small></span><ArrowRight /></Link><Link href="/history"><History /><span><b>Sejarah Cabutan</b><small>Lihat dan eksport keputusan</small></span><ArrowRight /></Link></div></section>
   </div>;
 }

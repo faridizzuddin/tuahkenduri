@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Gift, History, LayoutDashboard, LogOut, Menu, Settings, TicketCheck, Users, X } from "lucide-react";
+import { Gift, History, LayoutDashboard, LogOut, Menu, Settings, Sprout, TicketCheck, Users, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Logo } from "./logo";
@@ -12,6 +12,7 @@ const links = [
   { href: "/", label: "Ringkasan", icon: LayoutDashboard },
   { href: "/participants", label: "Senarai Peserta", icon: Users },
   { href: "/gifts", label: "Senarai Hadiah", icon: Gift },
+  { href: "/teka-biji-betik", label: "Teka Biji Betik", icon: Sprout },
   { href: "/draw", label: "Mula Cabutan", icon: TicketCheck },
   { href: "/history", label: "Sejarah Cabutan", icon: History },
   { href: "/settings", label: "Tetapan", icon: Settings },

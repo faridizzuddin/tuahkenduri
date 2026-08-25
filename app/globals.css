@@ -449,6 +449,100 @@
   .quick-grid a.featured > svg { @apply text-white; }
   .quick-grid a.featured small { @apply text-white/65; }
 
+  .quick-grid a.game { @apply border-[#c9ded4] bg-[#eff8f3]; }
+  .quick-grid a.game > svg:first-child { @apply text-[#2f765c]; }
+  .quick-grid a.game b { @apply text-[#245d49]; }
+
+  /* Teka Biji Betik */
+  .betik-hero {
+    @apply relative mb-4 grid min-h-[270px] grid-cols-[150px_minmax(0,1fr)_290px] items-center gap-7 overflow-hidden rounded-[24px] border border-[#315f4d] p-7 text-white shadow-[0_20px_50px_rgba(25,67,50,0.14)];
+    background:
+      radial-gradient(circle at 16% 18%, rgba(248, 193, 91, .17), transparent 25%),
+      linear-gradient(135deg, #2f7458 0%, #194a38 58%, #12372b 100%);
+  }
+
+  .betik-hero::after {
+    content: "";
+    @apply pointer-events-none absolute -right-20 -bottom-32 size-72 rounded-full border border-white/10;
+    box-shadow: 0 0 0 35px rgba(255,255,255,.025), 0 0 0 70px rgba(255,255,255,.02);
+  }
+
+  .betik-fruit {
+    @apply relative mx-auto h-[182px] w-[112px] rotate-6 rounded-[54%_46%_51%_49%/44%_44%_56%_56%] border-[6px] border-[#8bb56b] bg-[#e89c38] shadow-[inset_0_0_0_8px_#f4bc59,0_18px_30px_rgba(6,35,24,.3)];
+  }
+
+  .betik-fruit::before {
+    content: "";
+    @apply absolute top-[17px] right-[27px] bottom-[17px] left-[27px] rounded-[48%] bg-[#f3d27d] shadow-[inset_0_0_18px_rgba(128,72,20,.2)];
+  }
+
+  .betik-fruit::after {
+    content: "";
+    @apply absolute -top-3 left-[43px] h-5 w-4 -rotate-12 rounded-t-lg bg-[#577f46];
+  }
+
+  .betik-fruit i { @apply absolute z-[1] size-2.5 rounded-full bg-[#392b23] shadow-[inset_-2px_-2px_#1b1714]; }
+  .betik-fruit i:nth-child(1) { @apply top-[42px] left-[44px]; }
+  .betik-fruit i:nth-child(2) { @apply top-[59px] left-[58px]; }
+  .betik-fruit i:nth-child(3) { @apply top-[76px] left-[41px]; }
+  .betik-fruit i:nth-child(4) { @apply top-[92px] left-[57px]; }
+  .betik-fruit i:nth-child(5) { @apply top-[109px] left-[43px]; }
+  .betik-fruit i:nth-child(6) { @apply top-[125px] left-[57px]; }
+  .betik-fruit i:nth-child(7) { @apply top-[139px] left-[44px]; }
+
+  .betik-hero-copy { @apply relative z-[1]; }
+  .betik-state { @apply mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-3 py-1.5 text-[10px] font-extrabold tracking-[0.1em] text-white/80 uppercase; }
+  .betik-state > span { @apply size-2 rounded-full bg-[#a9dd94] shadow-[0_0_0_4px_rgba(169,221,148,.12)]; }
+  .betik-hero.revealed .betik-state > span { @apply bg-[#f1c76d] shadow-[0_0_0_4px_rgba(241,199,109,.12)]; }
+  .betik-hero-copy h2 { @apply m-0 font-display text-[clamp(2rem,3vw,3rem)] leading-[1.04] font-semibold tracking-[-0.035em]; }
+  .betik-hero-copy p { @apply mt-3 mb-0 max-w-lg text-[13px] leading-6 text-white/65; }
+
+  .betik-answer-card { @apply relative z-[1] rounded-[20px] border border-white/15 bg-[#fff9e9] p-5 text-[#244737] shadow-[0_16px_35px_rgba(7,31,22,.18)]; }
+  .betik-answer-card form { @apply grid gap-3; }
+  .betik-answer-card label,
+  .betik-answer-card > small { @apply text-[10px] font-extrabold tracking-[0.1em] text-[#6c7f72] uppercase; }
+  .betik-answer-card > strong { @apply mt-2 block font-display text-[3.6rem] leading-none font-semibold text-[#275e48] tabular-nums; }
+  .betik-answer-card > span { @apply mt-1 mb-4 block text-xs font-bold text-[#748078]; }
+  .betik-answer-card > .button { @apply w-full; }
+  .betik-answer-card .input { @apply border-[#d8d0bd] bg-white; }
+  .betik-answer-card .button { @apply min-h-11 w-full; }
+  .secret-answer { @apply flex min-h-11 items-center gap-2 rounded-xl border border-dashed border-[#b8ad93] bg-[#f8efd9] px-3.5 text-xs font-extrabold tracking-[0.08em] text-[#867555] uppercase; }
+  .secret-answer svg { @apply size-[18px]; }
+
+  .betik-stats { @apply mb-5 grid grid-cols-3 gap-3.5; }
+  .betik-stats > div { @apply flex min-h-[88px] items-center gap-3.5 rounded-2xl border border-line bg-white px-5 py-4; }
+  .betik-stats svg { @apply size-10 shrink-0 rounded-xl bg-[#edf6f1] p-2.5 text-[#36755d]; }
+  .betik-stats span { @apply text-[10px] font-extrabold tracking-[0.04em] text-muted uppercase; }
+  .betik-stats strong { @apply mt-1 block font-display text-[1.7rem] leading-none font-semibold tracking-normal text-maroon-dark tabular-nums; }
+
+  .winner-board { @apply mb-5 rounded-[22px] border border-[#e4cb8d] bg-[#fff9ea] p-5 shadow-[0_14px_36px_rgba(112,74,21,.08)]; }
+  .winner-board-heading { @apply mb-4 flex items-center gap-3; }
+  .winner-board-heading > svg { @apply size-11 rounded-xl bg-[#f4dfaa] p-2.5 text-[#90671a]; }
+  .winner-board-heading h2 { @apply mt-1 mb-0 font-display text-[1.55rem] font-semibold tracking-[-0.025em] text-maroon-dark; }
+  .winner-cards { @apply grid gap-2.5; }
+  .winner-cards article { @apply grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-4 rounded-2xl border border-[#eadab6] bg-white p-4; }
+  .winner-cards article > svg { @apply size-8 rounded-xl bg-maroon-soft p-1.5 text-maroon; }
+  .winner-cards article > div > strong,
+  .winner-cards article > div > span { @apply block; }
+  .winner-cards article > div > strong { @apply truncate text-sm text-maroon-dark; }
+  .winner-cards article > div > span { @apply mt-1 text-[11px] text-muted; }
+  .winner-guess { @apply text-right; }
+  .winner-guess small { @apply block text-[9px] font-extrabold tracking-[0.08em] text-muted uppercase; }
+  .winner-guess b { @apply mt-1 block font-display text-2xl text-maroon tabular-nums; }
+  .winner-cards article > span,
+  .result-pill { @apply inline-flex min-h-7 items-center rounded-full bg-[#eeeae7] px-2.5 text-[10px] font-extrabold whitespace-nowrap text-[#655e5b]; }
+  .winner-cards article > span.exact,
+  .result-pill.exact { @apply bg-[#e3f3eb] text-[#17634e]; }
+  .winner-cards article > span.closest,
+  .result-pill.closest { @apply bg-[#f8eac7] text-[#75520f]; }
+
+  .betik-entry-card { @apply mb-5; }
+  .betik-entry-form { @apply grid grid-cols-[minmax(190px,1fr)_minmax(180px,.8fr)_160px_auto] items-end gap-3; }
+  .betik-entry-form .field label span { @apply font-semibold text-muted; }
+  .betik-count { @apply text-base; }
+  .rank-cell { @apply font-display text-lg font-semibold text-[#8a651b]; }
+  .betik-table tr.winning-row td { @apply bg-[#fffaf0]; }
+
   /* History and settings */
   .history-toolbar .select { @apply w-auto; }
 
@@ -490,6 +584,9 @@
   .manager-grid { @apply grid-cols-1; }
   .stats-grid { @apply grid-cols-2; }
   .loading-card-grid { @apply grid-cols-2; }
+  .betik-hero { @apply grid-cols-[120px_minmax(0,1fr)_270px] gap-5; }
+  .betik-entry-form { @apply grid-cols-2; }
+  .betik-entry-form .button { @apply w-full; }
 }
 
 /* iPad layouts: use a full-width canvas with an off-canvas navigation drawer. */
@@ -564,6 +661,20 @@
   .auth-mobile-logo .logo-lockup strong { @apply text-maroon-dark; }
   .dialog { @apply p-6; }
   .loading-header { @apply items-start; }
+  .betik-hero { @apply grid-cols-[minmax(0,1fr)_260px] px-5; }
+  .betik-fruit { @apply absolute -left-10 opacity-20; }
+  .betik-hero-copy { @apply pl-3; }
+  .betik-stats { @apply gap-2.5; }
+  .betik-stats > div { @apply px-4; }
+}
+
+@media (max-width: 700px) {
+  .betik-hero { @apply grid-cols-1 gap-5; }
+  .betik-hero-copy { @apply pl-0; }
+  .betik-answer-card { @apply w-full; }
+  .betik-stats { @apply grid-cols-1; }
+  .winner-cards article { @apply grid-cols-[auto_minmax(0,1fr)_auto]; }
+  .winner-cards article > span { @apply col-span-3 justify-center; }
 }
 
 @media (max-width: 560px) {
@@ -588,6 +699,10 @@
   .skeleton-button { @apply w-full; }
   .loading-card-grid { @apply grid-cols-1; }
   .loading-panel { @apply p-5; }
+  .betik-entry-form { @apply grid-cols-1; }
+  .winner-cards article { @apply grid-cols-[auto_minmax(0,1fr)]; }
+  .winner-guess { @apply col-span-2 rounded-xl bg-[#fbf5e9] p-3 text-left; }
+  .winner-cards article > span { @apply col-span-2; }
 }
 
 /* Fullscreen lucky draw */

@@ -8,6 +8,7 @@ A private, Bahasa Melayu lucky-draw application for Malay wedding helpers. It us
 - Fast participant registration, editing, status management, search, deletion, and CSV import
 - Manual gifts, status management, search, and preview-first bulk number generation
 - Projector-friendly, resumable two-stage participant and gift draw
+- Host-managed “Teka Biji Betik” game with locked entries, exact/closest ranking, and fair ties
 - Server-secure random selection with row locks, constraints, and idempotent gift completion
 - Searchable history with CSV export
 - Readiness dashboard and typed-phrase transactional reset tools
@@ -23,6 +24,7 @@ Application routes:
 | `/` | Readiness and totals dashboard |
 | `/participants` | Participant registration and eligibility |
 | `/gifts` | Gift inventory and range generation |
+| `/teka-biji-betik` | Papaya-seed guesses, answer reveal, and winner ranking |
 | `/draw` | Fullscreen draw presentation |
 | `/history` | Draw history and CSV export |
 | `/settings` | Protected reset and clear operations |
@@ -48,7 +50,7 @@ Prerequisites: Node.js 20.9 or newer, npm, and a Supabase project.
 
    The anon key is safe to use in the browser together with RLS. Do not add a service-role key; this application does not require one.
 
-3. Apply [the migration](supabase/migrations/202607120001_initial_schema.sql). With a linked Supabase CLI project:
+3. Apply the migrations in [`supabase/migrations`](supabase/migrations), including the Teka Biji Betik migration. With a linked Supabase CLI project:
 
    ```bash
    npx supabase db push
