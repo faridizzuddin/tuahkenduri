@@ -52,5 +52,7 @@ describe("teka biji betik database safety contract", () => {
   it("enables row-level security for both game tables", () => {
     expect(betikSql).toContain("alter table public.betik_game enable row level security");
     expect(betikSql).toContain("alter table public.betik_guesses enable row level security");
+    expect(betikSql).toContain("revoke all on public.betik_guesses from anon, authenticated");
+    expect(betikSql).toContain("grant select, insert, update, delete on public.betik_guesses to authenticated");
   });
 });

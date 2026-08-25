@@ -46,6 +46,8 @@ create policy "authenticated hosts delete betik guesses" on public.betik_guesses
 
 revoke all on public.betik_game from anon, authenticated;
 grant select on public.betik_game to authenticated;
+revoke all on public.betik_guesses from anon, authenticated;
+grant select, insert, update, delete on public.betik_guesses to authenticated;
 
 create or replace function public.require_betik_game_open()
 returns trigger language plpgsql security definer set search_path = '' as $$
