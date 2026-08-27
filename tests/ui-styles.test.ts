@@ -61,4 +61,11 @@ describe("responsive UI contract", () => {
     expect(css).toContain(".betik-entry-form");
     expect(betik.match(/inputMode="numeric"/g)?.length).toBeGreaterThanOrEqual(3);
   });
+
+  it("selects registered Betik participants instead of accepting free-text names", () => {
+    expect(betik).toContain('list="betik-participant-options"');
+    expect(betik).toContain("selectedParticipantId");
+    expect(betik).toContain("participant.towel_number");
+    expect(betik).not.toContain('name="participant_name"');
+  });
 });

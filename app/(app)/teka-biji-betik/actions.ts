@@ -3,18 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { friendlyError } from "@/lib/error";
-import { betikAnswerSchema, betikGuessSchema, cleanSpaces } from "@/lib/validation";
+import { betikAnswerSchema, betikGuessCountSchema, betikGuessSchema } from "@/lib/validation";
 import type { ActionResult } from "@/lib/types";
 
 type GuessInput = {
-  participant_name: string;
-  entry_reference: string;
+  participant_id: string;
   guessed_count: number;
 };
 
 type ParsedGuess =
   | { ok: false; error: string }
-  | { ok: true; data: { participant_name: string; entry_reference: string | null; guessed_count: number } };
+  | { ok: true; data: { participant_id: string; guessed_count: number } };
 
 function parseGuess(input: GuessInput): ParsedGuess {
   const parsed = betikGuessSchema.safeParse(input);
@@ -22,8 +21,7 @@ function parseGuess(input: GuessInput): ParsedGuess {
   return {
     ok: true,
     data: {
-      participant_name: cleanSpaces(parsed.data.participant_name),
-      entry_reference: cleanSpaces(parsed.data.entry_reference) || null,
+      participant_id: parsed.data.participant_id,
       guessed_count: parsed.data.guessed_count,
     },
   };
@@ -33,17 +31,20 @@ export async function addBetikGuess(input: GuessInput): Promise<ActionResult> {
   const parsed = parseGuess(input);
   if (!parsed.ok) return { ok: false, message: parsed.error };
   const supabase = await createClient();
+  const { data: participant, error: participantError } = await supabase.from("participants").select("name,status").eq("id", parsed.data.participant_id).single();
+  if (participantError || !participant) return { ok: false, message: "Peserta berdaftar tidak ditemui." };
+  if (!(participant.status === "eligible" || participant.status === "won")) return { ok: false, message: "Peserta ini tidak layak menyertai permainan." };
   const { error } = await supabase.from("betik_guesses").insert(parsed.data);
-  if (error) return { ok: false, message: friendlyError(error) };
+  if (error) return { ok: false, message: error.code === "23505" ? "Peserta ini sudah mempunyai tekaan." : friendlyError(error) };
   revalidatePath("/teka-biji-betik");
-  return { ok: true, message: `Tekaan ${parsed.data.guessed_count.toLocaleString("ms-MY")} berjaya direkodkan.` };
+  return { ok: true, message: `Tekaan ${participant.name} berjaya direkodkan.` };
 }
 
-export async function updateBetikGuess(id: string, input: GuessInput): Promise<ActionResult> {
-  const parsed = parseGuess(input);
-  if (!parsed.ok) return { ok: false, message: parsed.error };
+export async function updateBetikGuess(id: string, guessedCount: number): Promise<ActionResult> {
+  const parsed = betikGuessCountSchema.safeParse(guessedCount);
+  if (!parsed.success) return { ok: false, message: parsed.error.issues[0]?.message ?? "Tekaan tidak sah" };
   const supabase = await createClient();
-  const { error } = await supabase.from("betik_guesses").update(parsed.data).eq("id", id);
+  const { error } = await supabase.from("betik_guesses").update({ guessed_count: parsed.data }).eq("id", id);
   if (error) return { ok: false, message: friendlyError(error) };
   revalidatePath("/teka-biji-betik");
   return { ok: true, message: "Penyertaan berjaya dikemas kini." };

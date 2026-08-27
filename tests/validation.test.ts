@@ -48,10 +48,11 @@ describe("CSV output", () => {
 });
 
 describe("teka biji betik", () => {
-  it("accepts a whole-number guess and optional reference", () => {
-    const entry = betikGuessSchema.parse({ participant_name: "Kak Siti", entry_reference: "Meja 6", guessed_count: "438" });
+  it("requires a registered participant id and whole-number guess", () => {
+    const entry = betikGuessSchema.parse({ participant_id: "550e8400-e29b-41d4-a716-446655440000", guessed_count: "438" });
     expect(entry.guessed_count).toBe(438);
-    expect(betikGuessSchema.safeParse({ participant_name: "Kak Siti", entry_reference: "", guessed_count: 0 }).success).toBe(false);
+    expect(betikGuessSchema.safeParse({ participant_id: "not-a-participant", guessed_count: 438 }).success).toBe(false);
+    expect(betikGuessSchema.safeParse({ participant_id: "550e8400-e29b-41d4-a716-446655440000", guessed_count: 0 }).success).toBe(false);
     expect(betikAnswerSchema.safeParse(1000001).success).toBe(false);
   });
 

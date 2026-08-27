@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 const sql = readFileSync(join(process.cwd(), "supabase/migrations/202607120001_initial_schema.sql"), "utf8").toLowerCase();
 const safeResetSql = readFileSync(join(process.cwd(), "supabase/migrations/202607120002_safe_reset_functions.sql"), "utf8").toLowerCase();
 const betikSql = readFileSync(join(process.cwd(), "supabase/migrations/202608250001_teka_biji_betik.sql"), "utf8").toLowerCase();
+const registeredBetikSql = readFileSync(join(process.cwd(), "supabase/migrations/202608260001_link_betik_guesses_to_participants.sql"), "utf8").toLowerCase();
 
 describe("draw database safety contract", () => {
   it("uses cryptographic server randomness and row locks", () => {
@@ -30,6 +31,17 @@ describe("draw database safety contract", () => {
     expect(safeResetSql).toContain("delete from public.participants where id is not null");
     expect(safeResetSql).toContain("delete from public.gifts where id is not null");
     expect(safeResetSql).not.toMatch(/delete from public\.(draw_results|participants|gifts)\s*;/);
+  });
+
+  it("links each guess to one registered participant", () => {
+    expect(registeredBetikSql).toContain("foreign key (participant_id) references public.participants(id) on delete restrict");
+    expect(registeredBetikSql).toContain("betik_guesses_one_per_participant unique (participant_id)");
+    expect(registeredBetikSql).toContain("alter column participant_id set not null");
+  });
+
+  it("only accepts eligible or previous winning participants", () => {
+    expect(registeredBetikSql).toContain("participant_status not in ('eligible', 'won')");
+    expect(registeredBetikSql).toContain("where p.status in ('eligible', 'won')");
   });
 });
 

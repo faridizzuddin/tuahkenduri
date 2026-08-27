@@ -8,7 +8,7 @@ A private, Bahasa Melayu lucky-draw application for Malay wedding helpers. It us
 - Fast participant registration, editing, status management, search, deletion, and CSV import
 - Manual gifts, status management, search, and preview-first bulk number generation
 - Projector-friendly, resumable two-stage participant and gift draw
-- Host-managed “Teka Biji Betik” game with locked entries, exact/closest ranking, and fair ties
+- Registered-participant “Teka Biji Betik” game with one guess per towel number, locked entries, exact/closest ranking, and fair ties
 - Server-secure random selection with row locks, constraints, and idempotent gift completion
 - Searchable history with CSV export
 - Readiness dashboard and typed-phrase transactional reset tools

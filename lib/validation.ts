@@ -16,10 +16,11 @@ export const giftSchema = z.object({
   gift_number: z.string().trim().min(1, "Nombor hadiah diperlukan").max(40),
 });
 
+export const betikGuessCountSchema = z.coerce.number().int("Tekaan mestilah nombor bulat").min(1, "Tekaan mestilah sekurang-kurangnya 1").max(1000000, "Tekaan maksimum ialah 1,000,000");
+
 export const betikGuessSchema = z.object({
-  participant_name: z.string().trim().min(1, "Nama peserta diperlukan").max(120, "Nama peserta terlalu panjang"),
-  entry_reference: z.string().trim().max(60, "Rujukan maksimum 60 aksara"),
-  guessed_count: z.coerce.number().int("Tekaan mestilah nombor bulat").min(1, "Tekaan mestilah sekurang-kurangnya 1").max(1000000, "Tekaan maksimum ialah 1,000,000"),
+  participant_id: z.string().uuid("Pilih peserta berdaftar yang sah"),
+  guessed_count: betikGuessCountSchema,
 });
 
 export const betikAnswerSchema = z.coerce.number().int("Jumlah sebenar mestilah nombor bulat").min(1, "Jumlah sebenar mestilah sekurang-kurangnya 1").max(1000000, "Jumlah sebenar maksimum ialah 1,000,000");

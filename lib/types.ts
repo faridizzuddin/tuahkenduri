@@ -38,12 +38,12 @@ export interface BetikGame {
 
 export interface BetikGuess {
   id: string;
-  participant_name: string;
-  entry_reference: string | null;
+  participant_id: string;
   guessed_count: number;
   created_by: string;
   created_at: string;
   updated_at: string;
+  participant: Pick<Participant, "id" | "towel_number" | "name" | "status">;
 }
 
 export interface RankedBetikGuess extends BetikGuess {

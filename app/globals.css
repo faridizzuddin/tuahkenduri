@@ -537,11 +537,23 @@
   .result-pill.closest { @apply bg-[#f8eac7] text-[#75520f]; }
 
   .betik-entry-card { @apply mb-5; }
-  .betik-entry-form { @apply grid grid-cols-[minmax(190px,1fr)_minmax(180px,.8fr)_160px_auto] items-end gap-3; }
-  .betik-entry-form .field label span { @apply font-semibold text-muted; }
+  .betik-entry-form { @apply grid grid-cols-[minmax(280px,1fr)_180px_auto] items-start gap-3; }
+  .betik-entry-form > .button { @apply mt-[27px]; }
+  .participant-preview { @apply mt-1 flex min-h-10 items-center gap-2 rounded-xl border border-[#c9e1d7] bg-[#edf7f2] px-3 text-xs text-[#29624d]; }
+  .participant-preview svg { @apply size-4 shrink-0; }
+  .participant-preview b { @apply font-extrabold tabular-nums; }
+  .participant-preview span { @apply truncate font-semibold; }
+  .participant-dialog-summary { @apply mb-5 flex items-center gap-3 rounded-xl border border-[#d7e6df] bg-[#f0f7f4] p-3; }
+  .participant-dialog-summary > span { @apply grid size-11 shrink-0 place-items-center rounded-xl bg-white text-sm font-extrabold text-maroon tabular-nums; }
+  .participant-dialog-summary strong,
+  .participant-dialog-summary small { @apply block; }
+  .participant-dialog-summary strong { @apply text-sm text-maroon-dark; }
+  .participant-dialog-summary small { @apply mt-1 text-[10px] font-bold text-muted; }
   .betik-count { @apply text-base; }
   .rank-cell { @apply font-display text-lg font-semibold text-[#8a651b]; }
   .betik-table tr.winning-row td { @apply bg-[#fffaf0]; }
+  .betik-table tr.ineligible-row td { @apply bg-[#faf8f7] text-muted; }
+  .result-pill.ineligible { @apply ml-2 bg-[#eeeaea] text-[#676060]; }
 
   /* History and settings */
   .history-toolbar .select { @apply w-auto; }
@@ -586,7 +598,7 @@
   .loading-card-grid { @apply grid-cols-2; }
   .betik-hero { @apply grid-cols-[120px_minmax(0,1fr)_270px] gap-5; }
   .betik-entry-form { @apply grid-cols-2; }
-  .betik-entry-form .button { @apply w-full; }
+  .betik-entry-form .button { @apply col-span-2 mt-0 w-full; }
 }
 
 /* iPad layouts: use a full-width canvas with an off-canvas navigation drawer. */
@@ -700,6 +712,7 @@
   .loading-card-grid { @apply grid-cols-1; }
   .loading-panel { @apply p-5; }
   .betik-entry-form { @apply grid-cols-1; }
+  .betik-entry-form .button { @apply col-span-1; }
   .winner-cards article { @apply grid-cols-[auto_minmax(0,1fr)]; }
   .winner-guess { @apply col-span-2 rounded-xl bg-[#fbf5e9] p-3 text-left; }
   .winner-cards article > span { @apply col-span-2; }
